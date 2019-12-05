@@ -1,0 +1,42 @@
+{% extends "layout.html" %}
+{% block header %}
+	<link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css"/>
+	
+{% endblock header %}
+{% block content %}
+<h1 class="card p-4">History of Patient Record Access</h1>
+	<table id="access" class="table table-striped table-bordered" style="width:100%">
+        <thead>
+            <tr>
+                <th>User</th>
+                <th>Patient</th>
+                <th>Date</th>
+            </tr>
+        </thead>
+        <tbody>
+        	{% for list in lists.items %}
+	            <tr>
+	                <td>{{ list.user.username }}</td>
+	                <td>{{ list.viewed.name}}</td>
+	                <td>{{ list.date }}</td>
+	            </tr>
+	        {% endfor %}
+        </tbody>
+        <tfoot>
+            <tr>
+                <th>User</th>
+                <th>Patient</th>
+                <th>Date</th>
+            </tr>
+        </tfoot>
+    </table>	
+{% endblock content %}
+{% block others %}
+		<script type="text/javascript">
+		$(document).ready(function() {
+  			$('#access').DataTable();
+		} );
+		</script>
+		<script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+		<script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+{% endblock others %}

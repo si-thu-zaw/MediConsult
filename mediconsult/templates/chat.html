@@ -1,0 +1,160 @@
+{% extends "layout.html" %}
+{% block header %}
+
+<style>
+  .video1 {
+    background-color: #ddd;
+    border-radius: 7px;
+    margin: 10px 0px 0px 10px;
+    width: 70%;
+    height: auto;
+  }
+  .video2 {
+    background-color: #ddd;
+    border-radius: 7px;
+    margin: 10px 0px 0px 10px;
+    width: 20%;
+    height: auto;
+  }
+</style>
+
+<script src="https://www.gstatic.com/firebasejs/3.6.4/firebase.js"></script>
+{% endblock header %}
+{% block content %}
+<div class="accordion" id="accordionExample">
+  <div class="card">
+    <div class="card-header" id="headingOne">
+      <h5 class="mb-0">
+        <button class="btn btn-dark" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+          Text Message Chat
+        </button>
+      </h5>
+    </div>
+
+    <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
+      <div class="card-body">
+        <small>Never tell your password to anyone.</small>
+        <h3 style='color: #ccc;font-size: 30px;'>No message yet..</h3>
+        <div class="message_holder"></div>
+
+        <form action="" method="POST">
+          <div class="row form-group">
+            <div class="col-lg-11">
+              <input type="text" class="message form-control form-control-lg" placeholder="Messages"/>
+            </div>
+            <div class="col-lg-1">
+              <input type="submit" class="btn btn-outline-info"/>
+            </div>
+          </div>
+        </form>
+
+        <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.7.3/socket.io.min.js"></script>
+        <script type="text/javascript">
+          var socket = io.connect('http://' + document.domain + ':' + location.port);
+
+          socket.on( 'connect', function() {
+            socket.emit( 'my event', {
+              data: 'User Connected'
+            } )
+            var form = $( 'form' ).on( 'submit', function( e ) {
+              e.preventDefault()
+              let user_name = '{{ user.username }}'
+              let user_input = $( 'input.message' ).val()
+              socket.emit( 'my event', {
+                user_name : user_name,
+                message : user_input
+              } )
+              $( 'input.message' ).val( '' ).focus()
+            } )
+          } )
+          
+          socket.on( 'my response', function( msg ) {
+            console.log( msg )
+            if( typeof msg.user_name !== 'undefined' ) {
+              $( 'h3' ).remove()
+              $( 'div.message_holder' ).append( '<p><b style="color: #000">'+msg.user_name+'</b> '+msg.message+'</p>' )
+            }
+          })
+        </script>
+      </div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-header" id="headingTwo">
+      <h5 class="mb-0">
+        <button class="btn btn-dark collapsed" type="button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+          Video Chat
+        </button>
+      </h5>
+    </div>
+    <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionExample">
+      <div class="card-body">
+        <body>
+          <video class="video1" id="yourVideo" autoplay muted></video>
+          <video class="video2" id="friendsVideo" autoplay></video>
+          <br />
+          <button onclick="showMyFace()" type="button" class="btn btn-outline-info btn-lg"><span class="glyphicon glyphicon-facetime-video" aria-hidden="true"></span>1. Start Video</button>
+          <button onclick="showFriendsFace()" type="button" class="btn btn-outline-success btn-lg"><span class="glyphicon glyphicon-facetime-video" aria-hidden="true"></span>2. Call</button>
+        </body>
+        <script>
+            var config = {
+                apiKey: "AIzaSyCt7ifEQsELWk_N1OczqERnmIOv-YAn92I",
+                authDomain: "alpine-carrier-242706.firebaseapp.com",
+                databaseURL: "https://alpine-carrier-242706.firebaseio.com",
+                projectId: "alpine-carrier-242706",
+                storageBucket: "alpine-carrier-242706.appspot.com",
+                messagingSenderId: "725872353422"
+            };
+            firebase.initializeApp(config);
+
+            var database = firebase.database().ref();
+            var yourVideo = document.getElementById("yourVideo");
+            var friendsVideo = document.getElementById("friendsVideo");
+            var yourId = Math.floor(Math.random()*1000000000);
+            var servers = {'iceServers': [{'urls': 'stun:stun.services.mozilla.com'}, {'urls': 'stun:stun.l.google.com:19302'}, {'urls': 'turn:numb.viagenie.ca','credential': 'QxfGnd9JXfTk2Pp','username': 'sithuzaw36@gmail.com'}]};
+            var pc = new RTCPeerConnection(servers);
+            pc.onicecandidate = (event => event.candidate?sendMessage(yourId, JSON.stringify({'ice': event.candidate})):console.log("Sent All Ice") );
+            pc.onaddstream = (event => friendsVideo.srcObject = event.stream);
+
+            function sendMessage(senderId, data) {
+             var msg = database.push({ sender: senderId, message: data });
+             msg.remove();
+            }
+
+            function readMessage(data) {
+             var msg = JSON.parse(data.val().message);
+             var sender = data.val().sender;
+             if (sender != yourId) {
+             if (msg.ice != undefined)
+             pc.addIceCandidate(new RTCIceCandidate(msg.ice));
+             else if (msg.sdp.type == "offer")
+             pc.setRemoteDescription(new RTCSessionDescription(msg.sdp))
+             .then(() => pc.createAnswer())
+             .then(answer => pc.setLocalDescription(answer))
+             .then(() => sendMessage(yourId, JSON.stringify({'sdp': pc.localDescription})));
+             else if (msg.sdp.type == "answer")
+             pc.setRemoteDescription(new RTCSessionDescription(msg.sdp));
+             }
+            };
+
+            database.on('child_added', readMessage);
+
+            function showMyFace() {
+             navigator.mediaDevices.getUserMedia({audio:true, video:true})
+             .then(stream => yourVideo.srcObject = stream)
+             .then(stream => pc.addStream(stream));
+            }
+
+            function showFriendsFace() {
+             pc.createOffer()
+             .then(offer => pc.setLocalDescription(offer) )
+             .then(() => sendMessage(yourId, JSON.stringify({'sdp': pc.localDescription})) );
+            }
+        </script>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock content %}

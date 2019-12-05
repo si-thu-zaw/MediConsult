@@ -1,0 +1,77 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="content-section">
+	<div class="card">
+	  <div class="card-header">
+	    Message Of The Day
+	  </div>
+	  {% if motd %}
+	  <div class="card-body">
+	    <h5 class="card-title">{{ motd.title }}</h5>
+	    <p class="card-text">{{ motd.content}}</p>
+	    <small class="text-muted">
+			<p>Date posted: {{ motd.date.strftime('%y-%m-%d') }}</p>
+		</small>
+	  </div>
+	</div>
+	{% else %}
+	<div class="card-body">
+	    <h5 class="card-title">There is currently no message of the day.</h5>
+	    <p class="card-text">Stay tuned here for any announcements.</p>
+	  </div>
+	</div>
+	{% endif %}
+	</div>
+	<hr>
+	<div class="row">
+		<div class="col-lg-4">
+			<div class="card p-4 text-center">
+				<a href="{{ url_for('mypatients') }}">
+					<i class="fas fa-file-medical fa-5x p-3 dashboardicon"></i>
+					<h3>My Patients</h3>
+				</a>
+			</div>
+		</div>
+		<div class="col-lg-4">
+			<div class="card p-4 text-center">
+				<a href="{{ url_for('cases') }}">
+					<i class="fas fa-comment-medical fa-5x p-3 dashboardicon"></i>
+					<h3>Cases</h3>
+				</a>
+			</div>
+		</div>	
+		<div class="col-lg-4">
+			<div class="card p-4 text-center">
+				<a href="{{ url_for('chat') }}">
+					<i class="far fa-address-book fa-5x p-3 dashboardicon"></i>
+					<h3>Contacts</h3>
+				</a>
+			</div>
+		</div>
+	</div>
+	<hr>
+	<div class="card">
+	  <div class="card-header">
+	    Latest Case Updates
+	  </div>
+	  <div class="card-body">
+	  	<div class="">
+	  	    <div class="row">
+	  	        {% for medcase in medcases.items %}
+	  	            <div class="col-lg-4 mb-4">
+	  	                <div class="card p-4">
+	  	                    <small>Case ID: {{ medcase.id }}</small>
+	  	                    <h2>{{ medcase.title }}</h2>
+	  	                    <h4>Patient:{{ medcase.subject.name }}</h4>
+	  	                    <small>Posted: {{ medcase.date }}</small>
+	  	                    <p>{{ medcase.content  | truncate(150) }}</p>
+	  	                </div>
+	  	            </div>
+	  	        {% endfor %}
+	  	    </div>
+	  	</div>
+	  </div>
+	</div>
+</div>
+
+{% endblock content %}

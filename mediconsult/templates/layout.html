@@ -1,0 +1,209 @@
+<!doctype HTML>
+<html lang=en>
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	{% if title %}
+		<title>MediConsult - {{ title }}</title>
+	{% else %}
+		<title>MediConsult System</title>
+	{% endif %}
+	
+	<!-- Bootstrap CSS CDN -->
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+	<!-- Fonts CDN -->
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+
+	<link href='https://fonts.googleapis.com/css?family=Baumans' rel='stylesheet'>
+	
+
+	<!-- Custom CSS and Media Queries -->
+	<link rel="stylesheet" type="text/css" href="https://storage.googleapis.com/wise-resolver-246504.appspot.com/stylesheets/index.css"/>
+	<link rel="stylesheet" href="{{ url_for('static', filename='index.css') }}"/>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.min.css"/>
+
+	<script src="https://kit.fontawesome.com/b60ca87707.js"></script>
+	<!-- Other Custom Headers -->
+	{% block header %}	{% endblock %}
+</head>
+
+<body>
+
+
+	<nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+		
+			<button type="button" id="sidebarCollapse" class="d-lg-none btn btn-dark">
+                <i class="fas fa-align-left"></i>
+			</button>
+			<button class="btn btn-dark d-inline-block d-lg-none ml-auto" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+				<i class="fas fa-align-justify"></i>
+			</button>
+			<a class="navbar-brand" href="{{ url_for('home') }}">MediConsult</a>
+			<div class="collapse navbar-collapse" id="navbarSupportedContent">
+				<ul class="nav navbar-nav ml-auto">
+					<li class="nav-item">
+						<a class="nav-link d-lg-none" href="{{ url_for('contact') }}">Help</a>
+						<a href="{{ url_for('contact') }}"><button type="button" style="margin-right: 18px;" class="btn btn-dark  d-none d-lg-block"><i class="fas fa-question-circle"></i></button></a>
+					</li>
+					{% if current_user.is_authenticated %}
+					<li class="nav-item">
+						<a class="nav-link d-lg-none" href="{{ url_for('account') }}">Account</a>
+						<a href="{{ url_for('account') }}"><button type="button" style="margin-right: 18px;" class="btn btn-dark  d-none d-lg-block"><i href="account" class="fas fa-user"></i></button></a>
+					</li>
+					{% endif %}
+					<li class="nav-item dropdown">
+						<a class="nav-link d-lg-none dropdown-toggle" id="navbarDropdown" role="button" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Options</a>
+						<button id="navbarDropdown" type="button" style="margin-right: 18px;" class="btn btn-dark  d-none d-lg-block" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></button>	
+						<div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+							{% if current_user.is_authenticated %}
+							<div class="dropdown-divider"></div>
+							<a class="dropdown-item" href="{{ url_for('logout') }}">Log Out</a>
+                            {% else %}
+                            <a class="dropdown-item" href="{{ url_for('login') }}">Log In</a>
+							{% endif %}
+						</div>
+					</li>
+				</ul>
+			</div>
+	</nav>
+	
+	
+	<div class="wrapper">
+        <!-- Sidebar  -->
+        <nav id="sidebar">
+            <div id="dismiss" >
+                <i class="fas fa-arrow-left class d-lg-none"></i>
+            </div>
+
+            <div class="d-lg-none sidebar-header">
+                <h3>Menu</h3>
+            </div>
+
+            <ul class="list-unstyled components">
+            	{% if current_user.is_authenticated %}
+            	<p>Welcome, {{ current_user.username }}</p>
+            	{% endif %}
+                <li>
+                	{% if current_user.is_authenticated %}
+                	<li>
+                		<a href="{{ url_for('dashboard') }}">Dashboard</a>
+                	</li>
+                	<li>
+             			<a href="{{ url_for('cases') }}">Cases</a>
+             		</li>
+             		<li>
+                		<a href="{{ url_for('mypatients') }}">My Patients</a>
+                	</li>
+                	<li>
+                		<a href="{{ url_for('chat') }}">Contacts</a>
+                	</li>
+                	{% endif %}
+                	{% if not current_user.is_authenticated %}
+                	<li>
+                		<a href="{{ url_for('home') }}">Home</a>
+                	</li>
+                	<!-- <li>
+                		<a href="{{ url_for('about') }}">About</a>
+                    </li>-->
+                    <li>
+                    	<a href="{{ url_for('contact') }}">Contact Us</a>
+                	</li>
+                	{% endif %}
+                </li>
+                {% if current_user.role == 1 %}
+                <hr>
+                <p>Administrator Controls</p>
+                <!-- <li>
+                    <a href="#pageSubmenu" data-toggle="collapse" aria-expanded="false">Pages</a>
+                    <ul class="collapse list-unstyled" id="pageSubmenu">
+                        <li>
+                            <a href="{{ url_for('register') }}">Register</a>
+                        </li>
+                        <li>
+                            <a href="{{ url_for('login') }}">Login</a>
+                        </li>
+                        <li>
+                            <a href="{{ url_for('new_post') }}  ">New Post</a>
+                        </li>
+                    </ul>
+                </li> -->
+                <li>
+                	<a href="{{ url_for('admin_users') }}">Users</a>
+                </li>
+                <li>
+                    <a href="{{ url_for('admin_cases') }}">Cases</a>
+                </li>
+                <li>
+                    <a href="{{ url_for('admin_patients') }}">Patients</a>
+                </li>
+                <li>
+                	<a href="{{ url_for('admin_motd') }}">MOTD Controls</a>
+                </li>
+                <li>
+                    <a href="{{ url_for('access_history') }}">Access History</a>
+                </li>
+                {% endif %}
+            </ul>
+        </nav>
+
+        <!-- Page Content  -->
+        <main id="content" class="">
+			{% with messages = get_flashed_messages(with_categories=true) %}
+				{% if messages %}
+					{% for category, message in messages %}
+						<div class="alert alert-{{ category }}">
+							{{ message }}
+						</div>
+					{% endfor %}
+				{% endif %}
+			{% endwith %}
+			<!-- Main Content Block -->
+			<div id="main">
+				{% block content %}	{% endblock %}
+			</div>
+        </main>
+    </div>
+	
+    <div class="overlay"></div>
+	
+	
+	
+
+
+	<!-- jQuery CDNN -->
+	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+	<!-- Popper JS CDN -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+	<!-- Bootstrap JS -->
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+	<!-- jQuery Custom Scroller CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.concat.min.js"></script>
+    	
+	<!-- Custom Scripts -->
+	{% block others %}{% endblock %}
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#sidebar").mCustomScrollbar({
+                theme: "minimal"
+            });
+
+            $('#dismiss, .overlay').on('click', function () {
+                $('#sidebar').removeClass('active');
+                $('.overlay').removeClass('active');
+            });
+
+            $('#sidebarCollapse').on('click', function () {
+                $('#sidebar').addClass('active');
+                $('.overlay').addClass('active');
+                $('.collapse.in').toggleClass('in');
+                $('a[aria-expanded=true]').attr('aria-expanded', 'false');
+            });
+        });
+    </script>
+
+</body>
+
+</html>

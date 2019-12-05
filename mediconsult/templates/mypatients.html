@@ -1,0 +1,59 @@
+{% extends "layout.html" %}
+{% block header %}
+	<link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css"/>
+	
+{% endblock header %}
+{% block content %}
+<h1 class="card p-4">My Patients List</h1>
+<div class="containter card p-4">
+	<div class="row">
+		<a href="{{ url_for('new_patient') }}"><button type="button" class="btn btn-outline-info m-2">Add New Patient</button></a>
+	</div>
+</div>
+<hr>
+
+<div class="card p-4">
+	<table id="patients" class="table table-striped table-bordered" style="width:100%">
+        <thead>
+            <tr>
+            	<th>Patient ID</th>
+                <th>Name</th>
+                <th>Date of Birth</th>
+                <th>Gender</th>
+                <th>Address</th>
+                <th>Contact Number</th>
+            </tr>
+        </thead>
+        <tbody>
+        	{% for patient in patients.items %}
+	            <tr>
+	                <td>{{ patient.id }}</td>
+	                <td><a href="{{ url_for('patient', patient_id = patient.id) }}">{{ patient.name }}</a></td>
+	                <td>{{ patient.dob.strftime('%y-%m-%d') }}</td>
+	                <td>{{ patient.gender }}</td>
+	                <td>{{ patient.address }}</td>
+	                <td>{{ patient.contact_no }}</td>
+	            </tr>
+	        {% endfor %}
+        </tbody>
+        <tfoot>
+            <tr>
+            	<th>Patient ID</th>
+                <th>Name</th>
+                <th>Date of Birth</th>
+                <th>Gender</th>
+                <th>Address</th>
+                <th>Contact Number</th>
+            </tr>
+        </tfoot>
+    </table>
+</div>	
+{% endblock content %}
+{% block others %}
+		<script type="text/javascript">
+		$(document).ready(function() {
+  			$('#patients').DataTable();
+		} );
+		</script>
+		<script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+{% endblock others %}

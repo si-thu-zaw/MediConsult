@@ -1,0 +1,106 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="container">
+	<div class="card p-4">
+		<div class="row">
+			<div class="col-lg-2">
+				<img class="rounded-circle account-img" src="{{ url_for('static', filename='images/profiles/' + case.poster.image_file) }}">
+				<h4>{{ case.poster.username }}</h4>
+				<small>Date Posted: {{ case.date.strftime('%y-%m-%d')}}</small>
+			</div>
+			<div class="col-lg-10">
+				<h2>{{ case.title }}</h2>
+				<p>{{ case.content }}</p>
+			</div>
+		</div>
+	</div>
+	<hr>
+	<div class="card p-4">
+		<div class="row">
+			<button data-toggle="modal" data-target="#deleteModal" type="button" class="btn btn-primary m-1">Patient Information</button>
+			<button class="btn btn-primary m-1" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">Write Comment</button>
+		</div>
+		<div class="collapse" id="collapseExample">
+		  <div class="card card-body">
+		  	<form method="POST" action="">
+		  		{{ form.hidden_tag() }}
+			    <fieldset class="form-group">
+			    	<div class="form-group">
+			    		{{ form.commentcontent.label(class="form-control-label") }}
+			    		
+			    		{% if form.commentcontent.errors %}
+			    			{{ form.commentcontent(class="form-control form-control-lg is-invalid") }}
+			    			<div class="invalid-feedback">
+			    				{% for error in form.commentcontent.errors %}
+			    					<span> {{ error }} </span>
+			    				{% endfor %}
+			    		{% else %}
+			    			{{ form.commentcontent(rows='4', class="form-control form-control-lg") }}
+			    		{% endif %}
+			    			</div>
+					    <div class="form-group">
+					    	{{ form.submit(class="btn btn-outline-info") }}
+					    </div>
+					</div>
+				</fieldset>
+			</form>
+		  </div>
+		</div>
+		<!-- Modal -->
+		<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+		  <div class="modal-dialog" role="document">
+		    <div class="modal-content">
+		      <div class="modal-header">
+		        <h5 class="modal-title" id="deleteModalLabel">Patient Information</h5>
+		        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+		          <span aria-hidden="true">&times;</span>
+		        </button>
+		      </div>
+		      <div class="modal-body">
+		        <p>Patient Name: {{ patient.name }}</p>
+		        <p>Date of Birth: {{ patient.dob }}</p>
+		        <p>Gender: {{ patient.gender }}</p>
+		        <hr>
+		      </div>
+		      <div class="modal-footer">
+		        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+		        <a href="{{ url_for('patient', patient_id=patient.id) }}" class="btn btn-outline-info">Go To Patient Profile</a>
+		      </div>
+		    </div>
+		  </div>
+		</div>
+	</div>
+	<hr>
+	<div class="card p-4">
+	{% for comment in comments.items %}
+	<div class="row">
+		<div class="col-lg-2">
+			<img class="rounded-circle account-img" src="{{ url_for('static', filename='images/profiles/' + comment.commenter.image_file) }}">
+			<h4>{{ comment.commenter.username }}</h4>
+			<small>Date Posted: {{ comment.date.strftime('%y-%m-%d')}}</small>
+		</div>
+		<div class="col-lg-10">
+			<p>{{ comment.content }}</p>
+		</div>
+	</div>
+	<hr>
+	{% endfor %}
+	<!-- Pagination -->
+	<div class="card-body">
+		{% for page_num in comments.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
+			{% if page_num %}
+				{% if comments.page == page_num %}
+					<a class="btn btn-info mb-4" href="{{ url_for('case', page=page_num, case_id=case.id) }}">{{ page_num }}</a>
+				{% else %}
+					<a class="btn btn-outline-info mb-4" href="{{ url_for('case', page=page_num, case_id=case.id) }}">{{ page_num }}</a>
+				{% endif %}
+			{% else %}
+				...
+			{% endif %}
+		{% endfor %}
+	</div>
+	</div>
+</div>
+
+
+{% endblock content %}

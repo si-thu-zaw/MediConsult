@@ -1,0 +1,36 @@
+{% extends "layout.html" %}
+{% block content %}
+ <article role="article" class="">
+    <br>
+    <div id="googleMap" class="googlemap1"></div>
+
+    <script>
+      function myMap() {
+        var mapProp = {
+          center: new google.maps.LatLng(1.297047, 103.801084),
+          zoom: 16
+        };
+        var map = new google.maps.Map(document.getElementById("googleMap"), mapProp);
+      }
+    </script>
+
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCF6x5OujARNwxgYtJbOnKO1oNPzpM6P34&callback=myMap"></script>
+
+    <form action="#" method="post" class="contactform well card p-4">
+
+      <h1>Contact Us</h1>
+      <input class="contactformfield" name="Name" placeholder="Name" type="text"> <br>
+      <input class="contactformfield" name="Email" placeholder="Email Address" type="text"> <br>
+      <input class="contactformfield" name="Subject" placeholder="Subject" type="text"> <br>
+      <textarea class="contactformfield" name="Message" placeholder="Message" rows="10" cols="30"></textarea> <br>
+      <input class="contactformfield btn btn-outline-info" type="submit" value="Submit"><br>
+
+
+    </form>
+    <br>
+    
+    <div style="clear:both; font-size:1px;"></div>
+    <br>
+
+  </article>
+{% endblock content %}

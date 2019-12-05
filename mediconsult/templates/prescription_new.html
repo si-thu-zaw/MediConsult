@@ -1,0 +1,67 @@
+{% extends "layout.html" %}
+{% block content %}
+	<div class="content-section card p-4">
+		<form method="POST" action="">
+			{{ form.hidden_tag() }}
+			<fieldset class="form-group">
+				<legend class="border-bottom mb-4">{{ legend }}	</legend>
+				<div class="form-group">
+					{{ form.medication.label(class="form-control-label") }}
+					
+					{% if form.medication.errors %}
+						{{ form.medication(class="form-control form-control-lg is-invalid") }}
+						<div class="invalid-feedback">
+							{% for error in form.medication.errors %}
+								<span> {{ error }} </span>
+							{% endfor %}
+					{% else %}
+						{{ form.medication(class="form-control form-control-lg") }}
+					{% endif %}
+				</div>
+				<div class="form-group">
+					{{ form.frequency.label(class="form-control-label") }}
+					
+					{% if form.frequency.errors %}
+						{{ form.frequency(class="form-control form-control-lg is-invalid") }}
+						<div class="invalid-feedback">
+							{% for error in form.frequency.errors %}
+								<span> {{ error }} </span>
+							{% endfor %}
+					{% else %}
+						{{ form.frequency(class="") }}
+					{% endif %}
+				</div>
+				<div class="form-group">
+					{{ form.period.label(class="form-control-label") }}
+					
+					{% if form.period.errors %}
+						{{ form.period(class="form-control form-control-lg is-invalid") }}
+						<div class="invalid-feedback">
+							{% for error in form.period.errors %}
+								<span> {{ error }} </span>
+							{% endfor %}
+					{% else %}
+						{{ form.period(class="form-control form-control-lg") }}
+					{% endif %}
+				</div>
+
+				<div class="form-group">
+					{{ form.comment.label(class="form-control-label") }}
+					
+					{% if form.comment.errors %}
+						{{ form.comment(class="form-control form-control-lg is-invalid") }}
+						<div class="invalid-feedback">
+							{% for error in form.comment.errors %}
+								<span> {{ error }} </span>
+							{% endfor %}
+					{% else %}
+						{{ form.comment(class="form-control form-control-lg") }}
+					{% endif %}
+				</div>
+			</fieldset>
+			<div class="form-group">
+				{{ form.submit(class="btn btn-outline-info") }}
+			</div>
+		</form>
+	</div>
+{% endblock content %}

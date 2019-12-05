@@ -1,0 +1,69 @@
+{% extends "layout.html" %}
+{% block header %}
+	<link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css"/>
+	
+{% endblock header %}
+{% block content %}
+<h1 class="card p-4">List of All Cases</h1>
+	<table id="cases" class="table table-striped table-bordered" style="width:100%">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Title</th>
+                <th>Date Posted</th>
+                <th>Poster</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+        	{% for medcase in medcases.items %}
+	            <tr>
+	                <td><a href="#">{{ medcase.id }}</a></td>
+	                <td>{{ medcase.title }}</td>
+	                <td>{{ medcase.date.strftime('%y-%m-%d') }}</td>
+	                <td>{{ medcase.poster.username }}</td>
+                    <td><button data-toggle="modal" data-target="#deleteModal" type="button" class="btn btn-danger btn-sm m-1">Delete</button></td>
+                        <!-- Modal -->
+                        <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+                          <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                              <div class="modal-header">
+                                <h5 class="modal-title" id="deleteModalLabel">Confirm Delete</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                  <span aria-hidden="true">&times;</span>
+                                </button>
+                              </div>
+                              <div class="modal-body">
+                                Are you sure you want to delete this message?
+                              </div>
+                              <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                <form action="{{ url_for('delete_case', medcase_id=medcase.id) }}" method="POST">
+                                    <input class="btn btn-danger" type="submit" value="Delete">
+                                </form>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+	            </tr>
+	        {% endfor %}
+        </tbody>
+        <tfoot>
+            <tr>
+                <th>ID</th>
+                <th>Title</th>
+                <th>Date Posted</th>
+                <th>Poster</th>
+                <th></th>
+            </tr>
+        </tfoot>
+    </table>	
+{% endblock content %}
+{% block others %}
+		<script type="text/javascript">
+		$(document).ready(function() {
+  			$('#cases').DataTable();
+		} );
+		</script>
+		<script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+{% endblock others %}

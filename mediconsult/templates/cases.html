@@ -1,0 +1,44 @@
+{% extends "layout.html" %}
+{% block header %}
+	<link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css"/>
+	
+{% endblock header %}
+{% block content %}
+<h1 class="card p-4">List of All Cases</h1>
+	<table id="cases" class="table table-striped table-bordered" style="width:100%">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Title</th>
+                <th>Date Posted</th>
+                <th>Poster</th>
+            </tr>
+        </thead>
+        <tbody>
+        	{% for case in cases.items %}
+	            <tr>
+	                <td><a href="#{{ url_for('case', post_id=case.id) }}">{{ case.id }}</a></td>
+	                <td>{{ case.title }}</td>
+	                <td>{{ case.date.strftime('%y-%m-%d') }}</td>
+	                <td>{{ case.poster }}</td>
+	            </tr>
+	        {% endfor %}
+        </tbody>
+        <tfoot>
+            <tr>
+                <th>ID</th>
+                <th>Title</th>
+                <th>Date Posted</th>
+                <th>Poster</th>
+            </tr>
+        </tfoot>
+    </table>	
+{% endblock content %}
+{% block others %}
+		<script type="text/javascript">
+		$(document).ready(function() {
+  			$('#cases').DataTable();
+		} );
+		</script>
+		<script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+{% endblock others %}

@@ -1,0 +1,66 @@
+{% extends "layout.html" %}
+{% block content %}
+	<div class="content-section ">
+		<form method="POST" action="">
+			{{ form.hidden_tag() }}
+			<fieldset class="form-group">
+				<legend class="border-bottom mb-4">Create Patient History</legend>
+				<div class="form-group">
+					{{ form.general.label(class="form-control-label") }}
+					
+					{% if form.general.errors %}
+						{{ form.general(class="form-control form-control-lg is-invalid") }}
+						<div class="invalid-feedback">
+							{% for error in form.content.errors %}
+								<span> {{ error }} </span>
+							{% endfor %}
+					{% else %}
+						{{ form.general(rows=6, class="form-control form-control-lg") }}
+					{% endif %}
+				</div>
+				<div class="form-group">
+					{{ form.medical.label(class="form-control-label") }}
+					
+					{% if form.medical.errors %}
+						{{ form.medical(class="form-control form-control-lg is-invalid") }}
+						<div class="invalid-feedback">
+							{% for error in form.content.errors %}
+								<span> {{ error }} </span>
+							{% endfor %}
+					{% else %}
+						{{ form.medical(rows=6, class="form-control form-control-lg") }}
+					{% endif %}
+				</div>
+				<div class="form-group">
+					{{ form.family.label(class="form-control-label") }}
+					
+					{% if form.family.errors %}
+						{{ form.family(class="form-control form-control-lg is-invalid") }}
+						<div class="invalid-feedback">
+							{% for error in form.content.errors %}
+								<span> {{ error }} </span>
+							{% endfor %}
+					{% else %}
+						{{ form.family(rows=6, class="form-control form-control-lg") }}
+					{% endif %}
+				</div>
+				<div class="form-group">
+					{{ form.personal.label(class="form-control-label") }}
+					
+					{% if form.personal.errors %}
+						{{ form.personal(class="form-control form-control-lg is-invalid") }}
+						<div class="invalid-feedback">
+							{% for error in form.content.errors %}
+								<span> {{ error }} </span>
+							{% endfor %}
+					{% else %}
+						{{ form.personal(rows=6, class="form-control form-control-lg") }}
+					{% endif %}
+				</div>
+			</fieldset>
+			<div class="form-group">
+				{{ form.submit(class="btn btn-outline-info") }}
+			</div>
+		</form>
+	</div>
+{% endblock content %}
