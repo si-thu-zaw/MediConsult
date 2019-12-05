@@ -58,8 +58,7 @@ The following demo accounts can be used see the views of the users and administr
 * Username: demouser@mail.com 
 * Password: password
 
-The application may not be always online due to costs associated with cloud hosting. If you 
-
+The application may not be always online due to costs associated with cloud hosting. If the application is offline or you have any questions for me, drop me an email at sithuzaw36@gmail.com and I'll be glad to help. 
 
 
 
